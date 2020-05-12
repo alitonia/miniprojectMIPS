@@ -1,0 +1,11 @@
+string 
+latestDiff = -1
+flag = 1
+for (int i = 0 ; i < n-2; i++){
+	char x = str[i];
+	char y = str[i+1];
+	if (abs(y-x) > latestDiff){
+		latestDiff = abs(y-x)
+	}
+	else flag = 0
+}

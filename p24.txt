@@ -1,0 +1,11 @@
+string word = "1236456"
+string solString = null
+for (int i = 0 ; i < n/2 ; i++){
+	solString.append(word[i])
+	solString.append(word[length(word)-1-i))
+}
+if (length(word) % 2 != 0){
+	solString.append(word[i])
+}
+
+
