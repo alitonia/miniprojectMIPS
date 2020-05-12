@@ -1,11 +1,20 @@
-string 
-latestDiff = -1
-flag = 1
-for (int i = 0 ; i < n-2; i++){
+string str = "superb"; 
+int latestDiff = -1;
+int flag = 1;
+
+#however must be i < n-2 (exclude final character in mips string)
+for (int i = 0 ; i < n-1 ; i++){		
 	char x = str[i];
 	char y = str[i+1];
 	if (abs(y-x) > latestDiff){
 		latestDiff = abs(y-x)
 	}
-	else flag = 0
+	else{
+		flag = 0;
+		break;
+	}
 }
+
+if (flag == 0)
+	printf("is_surpassing_word(\"%s\") # => False", str);
+else printf("is_surpassing_word(\"%s\") # => True", str);

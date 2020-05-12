@@ -1,11 +1,34 @@
 string word = "1236456"
 string solString = null
+int latestDiff = -1;
+int flag = 1;
+
+#convert input string to cyclone form
 for (int i = 0 ; i < n/2 ; i++){
-	solString.append(word[i])
-	solString.append(word[length(word)-1-i))
+	solString.append(word[i]);
+	solString.append(word[length(word)-1-i));
 }
 if (length(word) % 2 != 0){
 	solString.append(word[i])
 }
+
+#test cyclone phrase
+#however must be i < n-2 (exclude final character in mips string)
+for (int i = 0 ; i < n-1 ; i++){
+	char x = str[i];
+	char y = str[i+1];
+	if (abs(y-x) >= latestDiff){
+		latestDiff = abs(y-x);
+	}
+	else{
+		flag = 0;
+		break;
+	}
+}
+
+if (flag == 0)
+	printf("is_cyclone_phrase(\"%s\")# => False", str);
+else printf("is_cyclone_phrase(\"%s\")# => True", str);
+
 
 
