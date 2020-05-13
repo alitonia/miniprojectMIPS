@@ -1,7 +1,62 @@
 .include "miniprojectUtils.asm"
-#TODO: see at end of file
 #TODO: document
 #TODO: User IO
+#TODO: Format new parts
+
+
+.macro get_str_index(%arr, %register_index)
+
+	# $v0 = $1`'[$2]
+
+	push_reg($t0)
+	push_reg($t1)
+
+	#$t0 = $2, $t1 = $1
+	push_reg(%register_index)
+	pop_reg($t0)
+
+	la $t1, %arr
+
+	add $t0, $t1, $t0
+	lb $v0, 0($t0)
+
+	pop_reg($t1)
+	pop_reg($t0)
+
+.end_macro
+
+
+.macro print_num_reg(%register)
+
+	#Print number in $1)
+	push_reg($v0)
+	push_reg($a0)
+	push_reg(%register)
+
+	li $v0, 1
+	pop_reg($a0)		# $a0 = $1
+	syscall
+
+	pop_reg($a0)
+	pop_reg($v0)
+
+.end_macro
+
+
+
+
+.macro print_label_int(%label)
+push_reg($t0)
+lw $t0, %label
+print_num_reg($t0)
+pop_reg($t0)
+.end_macro
+
+
+
+
+
+
 
 main:
 .data
@@ -114,3 +169,66 @@ okay:
 	printLabel(solved_string)
 
 # Step 2: Check condition ( ord(i) > ord(i+1) )
+
+
+
+
+.data
+	isOkay: .word 1
+.text
+
+# for loop from 0--> len(str) - 2
+.macro init_2
+	sw $zero, i
+.end_macro
+
+.macro cond_2
+	# i < len(str) - 1?
+	push_reg($t0)
+	push_reg($t1)
+
+	lw $t0, i  		# t0 = i
+	lw $t1, length 	
+	addi $t1, $t1, -1 # t1 = length - 1
+	                 
+	slt $v0, $t0, $t1    #i < len(str) - 1?
+	pop_reg($t1)
+	pop_reg($t0)
+.end_macro
+
+
+.macro increment_2
+	increase_by_1(i)
+.end_macro
+
+
+.macro body_2
+
+	push_reg($t0) # t0 = index
+	push_reg($t1) # t1 = condition
+
+	lw $t0, i
+	get_str_index(solved_string, $t0)
+	move $v1,$v0     # v1 = solved_string[i]
+
+	addi $t0, $t0, 1
+	get_str_index(solved_string, $t0)   # v0 = solved_string[i+1]
+
+	sgt $t1, $v1, $v0    # v0 > v1?
+	beqz $t1, Okay
+
+not_okay:
+	sw $zero, isOkay
+	j end
+Okay:
+	j end
+
+end:
+	pop_reg($t1)
+	pop_reg($t0)
+.end_macro
+
+for_branching(init_2, cond_2, increment_2, body_2)
+#End for loop
+
+print_label_int(isOkay)
